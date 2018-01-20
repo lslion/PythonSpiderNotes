@@ -50,15 +50,16 @@ class WechatSpider(scrapy.Spider):
         #     yield Request(url=next_url, meta={"item":item, 'cookiejar':response.meta['cookiejar']}, callback=self.parse2, dont_filter=True) ## 抓取当前页数和二级页面数据
 
         item = WechatprojectItem()
-        item['title'] = sites[8].xpath("descendant::text()").extract()  # 其中在item.py中定义了title = Field()
-        item["link"] = sites[8].xpath("@href").extract()  # 其中在item.py中定义了link = Field()
+        item['title'] = sites[7].xpath("descendant::text()").extract()  # 其中在item.py中定义了title = Field()
+        item["link"] = sites[7].xpath("@href").extract()  # 其中在item.py中定义了link = Field()
     #############################################################################################
     # yield item ## 只抓取当前页数据
-        next_url = item["link"][0]
-        print('start open wechat title is: ' + "".join(item['title']))
-        print('start open wechat link is: ' + item['link'][0])
+        item["link"] = item["link"][0]
+        item['title'] = "".join(item['title'])
+        print('start open wechat title is: ' + item['title'])
+        print('start open wechat link is: ' + item['link'])
     # yield Request(url=next_url, callback=self.parse2) ## 只抓取二级页面数据
-        yield Request(url=next_url, meta={"item": item}, callback=self.parse2,dont_filter=True)  ## 抓取当前页数和二级页面数据
+        yield Request(url=item["link"], meta={"item": item}, callback=self.parse2,dont_filter=True)  ## 抓取当前页数和二级页面数据
 
     # ## 使用BeautifulSoup方法，注意item中键对值为string类型
     # def parse(self, response):
