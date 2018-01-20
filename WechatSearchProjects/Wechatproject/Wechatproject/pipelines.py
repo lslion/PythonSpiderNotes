@@ -35,14 +35,16 @@ import pymongo
 class WechatprojectPipeline(object):
     # connnect databases
     def __init__(self):
-        connection = pymongo.Connection(host = "localhost", port = 27017)
-        db = connection["testwechat"] # you need no build database named testdouban
+        # connection = pymongo.Connection(host = "localhost", port = 27017)
+        client = pymongo.MongoClient("localhost", 27017)
+        db = client["testwechat"] # you need no build database named testdouban
         # db.authenticate(name = "root", password = "fireling") # no name and password for localhost
         self.posts = db["result"] # you need not build collection named book
     # pipeline default function
     def process_item(self, item, spider):
         self.posts.insert(dict(item)) # convert json to dict
         return item
+
 
 
 # # Json File
